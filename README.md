@@ -11,6 +11,15 @@ Esta é uma API Crud focada na inserção de musicas.
 }
 ```
 
+### Song Endpoints
+
+| HTTP Method | Endpoint          | Description            |
+|-------------|-------------------|------------------------|
+| GET         | /api/song/{id}    | Gets a song.           |
+| GET         | /api/song         | Gets all song.         |
+| POST        | /api/song         | Register a new song.   |
+| DELETE      | /api/song/{id}    | Delete a song.         |
+
 ## 📡 Tecnologias
 - C#
 - .NET Core
