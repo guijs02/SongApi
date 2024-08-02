@@ -13,12 +13,12 @@ Esta é uma API Crud focada na inserção de musicas.
 
 ### Song Endpoints
 
-| HTTP Method | Endpoint          | Description            |
-|-------------|-------------------|------------------------|
-| GET         | /api/song/{id}    | Gets a song.           |
-| GET         | /api/song         | Gets all song.         |
-| POST        | /api/song         | Register a new song.   |
-| DELETE      | /api/song/{id}    | Delete a song.         |
+| HTTP Method | Endpoint             | Description            |
+|-------------|----------------------|------------------------|
+| GET         | /api/v1/song/{id}    | Gets a song.           |
+| GET         | /api/v1/song         | Gets all song.         |
+| POST        | /api/v1/song         | Register a new song.   |
+| DELETE      | /api/v1/song/{id}    | Delete a song.         |
 
 ## 📡 Tecnologias
 - C#
@@ -28,7 +28,9 @@ Esta é uma API Crud focada na inserção de musicas.
 - MongoDb
 
 ## 🛠 Funcionalidades
-- Cadastro de musicas
+- Cadastro
+- Deleção
+- Alteração
 
 ## 💡 Patterns
 - Service
