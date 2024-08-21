@@ -1,0 +1,37 @@
+services:
+  mongodb:
+    container_name: mongodb
+    ports:
+    - 27017:27017
+    image: mongo
+    networks:
+      - songnet
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=gui 
+    - MONGO_INITDB_ROOT_PASSWORD=123
+    volumes:
+    - volumedb:/data/db/
+    tty: true
+
+
+  api:
+    build: 
+      context: .
+    container_name: song-api
+    image: guijs02/song-api
+    tty: true 
+    networks:
+      - songnet
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+     - 7500:8080
+    volumes:
+     - .:/app/SongApi
+
+networks:
+  songnet:
+    driver: bridge
+
+volumes:
+  volumedb:

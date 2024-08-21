@@ -2,16 +2,17 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Shared.Constants;
+using Shared.Model;
+using Shared.Request;
+using Shared.Response;
 using Song.Api.Settings;
-using Song.Shared.Constants;
-using Song.Shared.Request;
-using Song.Shared.Response;
 
 namespace Song.Api.Services
 {
     public class SongService : ISongService
     {
-        private readonly IMongoCollection<Shared.Model.Song> _songsCollection;
+        private readonly IMongoCollection<Songs> _songsCollection;
         public SongService(IOptions<SongDatabaseSettings> songDatabaseSettings)
         {
             var mongoClient = new MongoClient(
@@ -20,31 +21,31 @@ namespace Song.Api.Services
             var mongoDatabase = mongoClient.GetDatabase(
                 songDatabaseSettings.Value.DatabaseName);
 
-            _songsCollection = mongoDatabase.GetCollection<Shared.Model.Song>(
+            _songsCollection = mongoDatabase.GetCollection<Songs>(
                 songDatabaseSettings.Value.SongCollectionName);
         }
 
-        public async Task<Response<List<Shared.Model.Song>>> GetAsync()
+        public async Task<Response<List<Songs>>> GetAsync()
         {
             var songs = await _songsCollection.Find(_ => true).ToListAsync();
 
             return songs.Any() 
-                ? new Response<List<Shared.Model.Song>>(songs)
-                : new Response<List<Shared.Model.Song>>(null, code:StatusCodes.Status204NoContent);
+                ? new Response<List<Songs>>(songs)
+                : new Response<List<Songs>>(null, code:StatusCodes.Status204NoContent);
         }
-        public async Task<Response<Shared.Model.Song>> AddAsync(SongRequest request)
+        public async Task<Response<Songs>> AddAsync(SongRequest request)
         {
             if (AlreadyExistSong(request))
-                return new Response<Shared.Model.Song>(
+                return new Response<Songs>(
                     null,
                     ErrorMessages.AlreadyExistSong,
                     StatusCodes.Status409Conflict);
 
-            var song = new Shared.Model.Song() { Artist = request.Artist, Name = request.Name };
+            var song = new Songs() { Artist = request.Artist, Name = request.Name };
 
             await _songsCollection.InsertOneAsync(song);
 
-            return new Response<Shared.Model.Song>(
+            return new Response<Songs>(
                 song, SuccessMessages.Created, StatusCodes.Status201Created);
         }
         public async Task<Response<bool>> DeleteAsync(string id)
@@ -76,7 +77,7 @@ namespace Song.Api.Services
                     StatusCodes.Status409Conflict);
 
 
-            var song = new Shared.Model.Song { Artist = request.Artist, Name = request.Name };
+            var song = new Songs { Artist = request.Artist, Name = request.Name };
 
             var result = await _songsCollection.ReplaceOneAsync(f => f.Id == id, song);
 
